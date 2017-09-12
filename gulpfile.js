@@ -1,11 +1,12 @@
-var gulp = require('gulp'),
-    imagemin = require('gulp-imagemin'),
-    clean = require('gulp-clean'),
-    concat = require('gulp-concat'),
-    htmlReplace = require('gulp-html-replace'),
-    uglify = require('gulp-uglify'),
-    usemin = require('gulp-usemin'),
-    cssmin = require('gulp-cssmin');
+var gulp = require('gulp');
+var imagemin = require('gulp-imagemin');
+var clean = require('gulp-clean');
+var concat = require('gulp-concat');
+var htmlReplace = require('gulp-html-replace');
+var uglify = require('gulp-uglify');
+var usemin = require('gulp-usemin');
+var cssmin = require('gulp-cssmin');
+var browserSync = require('browser-sync');
 
 gulp.task('default', ['copy'], function(){
     gulp.start('build-img', 'usemin');
@@ -34,6 +35,16 @@ gulp.task('usemin', function(){
             'css': [cssmin]
         }))
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('server', function(){
+    browserSync.init({
+        server: {
+            baseDir: 'src'
+        }
+    });
+
+    gulp.watch('src/**/*').on('change',  browserSync.reload);
 });
 
 // gulp.task('build-js', function(){
@@ -82,4 +93,8 @@ gulp.task('clean', function() {
  * Plugin minificar arquivo css
  * 
  * npm install gulp-cssmin --save-dev
+ * 
+ * Plugin para atualização do browser, cria um servidor na máquina a partir de localhost
+ * 
+ * npm install browser-sync --save-dev  
  */
