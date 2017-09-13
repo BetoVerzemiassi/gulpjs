@@ -7,6 +7,9 @@ var uglify = require('gulp-uglify');
 var usemin = require('gulp-usemin');
 var cssmin = require('gulp-cssmin');
 var browserSync = require('browser-sync');
+var jshint = require('gulp-jshint');
+var jshintStylish = require('gulp-jshintStylish');
+var csslint = require('gulp-csslint');
 
 gulp.task('default', ['copy'], function(){
     gulp.start('build-img', 'usemin');
@@ -44,6 +47,16 @@ gulp.task('server', function(){
         }
     });
 
+    gulp.watch('src/js/*.js').on('change', function(event){
+        gulp.src(event.path)  
+            .pipe(jshint())
+            .pipe(jshint.reporter(jshintStylish));  
+    });
+    gulp.watch('src/css/*.css').on('change', function(event){
+        gulp.src(event.path)  
+            .pipe(csslint())
+            .pipe(csslint.reporter());  
+    });
     gulp.watch('src/**/*').on('change',  browserSync.reload);
 });
 
@@ -96,5 +109,17 @@ gulp.task('clean', function() {
  * 
  * Plugin para atualização do browser, cria um servidor na máquina a partir de localhost
  * 
- * npm install browser-sync --save-dev  
+ * npm install browser-sync --save-dev
+ * 
+ * Plugin para verificação de erro de syntax em JS
+ * 
+ * npm install gulp-jshint --save-dev  
+ * 
+ * Plugin para reportar erro de js mais resumido
+ * 
+ * npm install jshint-stylish --save-dev
+ * 
+ * Plugin para verificar erro de CSS
+ * 
+ * npm install gulp-csslint --save-dev
  */
