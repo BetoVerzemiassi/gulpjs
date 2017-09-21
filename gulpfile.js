@@ -11,6 +11,7 @@ var jshint = require('gulp-jshint');
 var jshintStylish = require('gulp-jshintStylish');
 var csslint = require('gulp-csslint');
 var autoprefixer = require('gulp-autoprefixer');
+var less = require('gulp-less');
 
 gulp.task('default', ['copy'], function(){
     gulp.start('build-img', 'usemin');
@@ -57,6 +58,14 @@ gulp.task('server', function(){
         gulp.src(event.path)
             .pipe(csslint())
             .pipe(csslint.reporter());
+    });
+    gulp.watch('src/less/*.less').on('change', function(event){
+        gulp.src(event.path)
+            .pipe(less().on('error', function(erro){
+                console.log('Problema na compilação');
+                console.log(erro.message);
+            }))
+            .pipe(gulp.dest('src/css'));
     });
     gulp.watch('src/**/*').on('change',  browserSync.reload);
 });
@@ -134,4 +143,8 @@ gulp.task('clean', function() {
  * css: [autoprefixer({
         browsers: ['last 5 versions']
       })]
+
+* Plugin pré-processadores
+*
+* npm install gulp-less --save-dev
  */
