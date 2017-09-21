@@ -10,6 +10,7 @@ var browserSync = require('browser-sync');
 var jshint = require('gulp-jshint');
 var jshintStylish = require('gulp-jshintStylish');
 var csslint = require('gulp-csslint');
+var autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('default', ['copy'], function(){
     gulp.start('build-img', 'usemin');
@@ -17,12 +18,12 @@ gulp.task('default', ['copy'], function(){
 
 gulp.task('copy', ['clean'], function(){
     return gulp.src('src/**/*')
-        .pipe(gulp.dest('dist'));    
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('clean', function(){
     return gulp.src('dist')
-        .pipe(clean());       
+        .pipe(clean());
 });
 
 gulp.task('build-img', function(){
@@ -35,7 +36,7 @@ gulp.task('usemin', function(){
     gulp.src('dist/**/*.html')
         .pipe(usemin({
             'js': [uglify],
-            'css': [cssmin]
+            'css': [autoprefixer, cssmin]
         }))
         .pipe(gulp.dest('dist'));
 });
@@ -48,14 +49,14 @@ gulp.task('server', function(){
     });
 
     gulp.watch('src/js/*.js').on('change', function(event){
-        gulp.src(event.path)  
+        gulp.src(event.path)
             .pipe(jshint())
-            .pipe(jshint.reporter(jshintStylish));  
+            .pipe(jshint.reporter(jshintStylish));
     });
     gulp.watch('src/css/*.css').on('change', function(event){
-        gulp.src(event.path)  
+        gulp.src(event.path)
             .pipe(csslint())
-            .pipe(csslint.reporter());  
+            .pipe(csslint.reporter());
     });
     gulp.watch('src/**/*').on('change',  browserSync.reload);
 });
@@ -64,7 +65,7 @@ gulp.task('server', function(){
 //     gulp.src(['dist/js/jquery.js','dist/js/home.js','dist/js/produto.js'])
 //         .pipe(concat('all.js'))//recebe como parâmetro o nome do arquivo resultante da concatenação
 //         .pipe(uglify())
-//         .pipe(gulp.dest('dist/js'));    
+//         .pipe(gulp.dest('dist/js'));
 // });
 
 // gulp.task('build-html', function(){
@@ -73,7 +74,7 @@ gulp.task('server', function(){
 //             js: 'js/all.js'
 //         }))
 //         .pipe(gulp.dest('dist'));
-    
+
 // });
 
 /*
@@ -89,37 +90,48 @@ gulp.task('clean', function() {
 
 /**
  * Plugin para concaternar arquivos no gulp
- * 
+ *
  * npm install gulp-concat --save-dev
- * 
+ *
  * Plugin para atualizar html
- * 
+ *
  * npm install gulp-html-replace --save-dev
- * 
+ *
  * Plugin para minificar arquivos JS
- * 
+ *
  * npm install gulp-uglify --save-dev
- * 
- * 
+ *
+ *
  * npm install gulp-usemin --save-dev
- * 
+ *
  * Plugin minificar arquivo css
- * 
+ *
  * npm install gulp-cssmin --save-dev
- * 
+ *
  * Plugin para atualização do browser, cria um servidor na máquina a partir de localhost
- * 
+ *
  * npm install browser-sync --save-dev
- * 
+ *
  * Plugin para verificação de erro de syntax em JS
- * 
- * npm install gulp-jshint --save-dev  
- * 
+ *
+ * npm install gulp-jshint --save-dev
+ *
  * Plugin para reportar erro de js mais resumido
- * 
+ *
  * npm install jshint-stylish --save-dev
- * 
+ *
  * Plugin para verificar erro de CSS
- * 
+ *
  * npm install gulp-csslint --save-dev
+ *
+ * Plugin para preenchimento de autoprefix em propriedade CSS
+ *
+ * npm install gulp-autoprefixer --save-dev
+ *
+ * Podemos passar os navegadores a serem suportados no próprio gulpfile.js, ao invés de criar o arquivo
+ * browserslist da seguinte forma abaixo.
+ *
+ * css: [autoprefixer({
+        browsers: ['last 5 versions']
+      })]
  */
